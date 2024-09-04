@@ -1,0 +1,1 @@
+{"level":"info","ts":1725348436.558539,"caller":"tests/zap_test.go:45","msg":"failed to fetch URL","url":"www.baidu.com","attempt":3,"backoff":1}
