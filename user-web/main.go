@@ -20,10 +20,16 @@ func main() {
 	// 2.获取配置文件
 	initialize.InitConfig()
 
-	// 2. 初始化svc客户端连接
+	// 3. 初始化svc客户端连接
 	api.InitUserClient()
 
-	// 2.初始化router
+	// 3.初始化router
+	initialize.Routers()
+	// 4.初始化翻译
+	if err := initialize.InitValidator("zh"); err != nil {
+		zap.S().Panicw("init validator failed", "msg", err.Error())
+	}
+
 	routers := initialize.Routers()
 	if err := routers.Run(fmt.Sprintf(":%d", global.ServerConf.ServerPort)); err != nil {
 		zap.S().Panicw("service start error", "msg", err.Error())
