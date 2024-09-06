@@ -115,8 +115,9 @@ func PassWordLogin(c *gin.Context) {
 		j := middlewares.NewJWT()
 		// 实例化claims
 		claims := models.CustomClaims{
-			ID:       uint(rsp.Id),
-			NickName: rsp.Nickname,
+			ID:          uint(rsp.Id),
+			NickName:    rsp.Nickname,
+			AuthorityId: uint(rsp.Role),
 			RegisteredClaims: jwt.RegisteredClaims{
 				ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
 				Issuer:    "test",
