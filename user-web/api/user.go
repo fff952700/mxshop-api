@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -11,7 +12,10 @@ import (
 	"google.golang.org/grpc/status"
 	"mxshop-api/user-web/forms"
 	"mxshop-api/user-web/global"
+	"mxshop-api/user-web/middlewares"
+	"mxshop-api/user-web/models"
 	"strconv"
+	"time"
 
 	"mxshop-api/user-web/proto"
 	"net/http"
@@ -107,8 +111,31 @@ func PassWordLogin(c *gin.Context) {
 			})
 			return
 		}
+		// 实例化jwt对象
+		j := middlewares.NewJWT()
+		// 实例化claims
+		claims := models.CustomClaims{
+			ID:       uint(rsp.Id),
+			NickName: rsp.Nickname,
+			RegisteredClaims: jwt.RegisteredClaims{
+				ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
+				Issuer:    "test",
+			},
+		}
+		// 创建token
+		token, err := j.CreateToken(claims)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"msg": "创建token失败",
+			})
+		}
+		data := map[string]interface{}{
+			"Token":     token,
+			"ExpiresAt": time.Now().Unix() + 60*60,
+		}
 		c.JSON(http.StatusOK, gin.H{
-			"msg": "登陆成功",
+			"msg":  "登陆成功",
+			"data": data,
 		})
 	}
 }

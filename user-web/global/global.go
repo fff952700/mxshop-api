@@ -16,6 +16,10 @@ var (
 	Translator ut.Translator
 )
 
+type JWTInfo struct {
+	SigningKey string
+}
+
 func HandleGrpcErrToHttp(err error, c *gin.Context) {
 	if err != nil {
 		if e, ok := status.FromError(err); ok {
