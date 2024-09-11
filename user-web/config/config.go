@@ -12,6 +12,7 @@ type JwtConfig struct {
 type CaptchaConfig struct {
 	Type          string `mapstructure:"type"`
 	SourceChinese string `mapstructure:"sourceChinese"`
+	EnableCaptcha bool   `mapstructure:"enableCaptcha"`
 }
 
 type ServerConfig struct {
