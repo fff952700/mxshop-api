@@ -78,7 +78,13 @@ func PassWordLogin(c *gin.Context) {
 		global.HandlerValidatorError(c, err)
 		return
 	}
-	fmt.Println(passWordLoginForm.Mobile)
+	// 先检测验证码是否正确
+	if !store.Verify(passWordLoginForm.CaptchaId, passWordLoginForm.Captcha, true) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "验证码错误",
+		})
+		return
+	}
 	// 通过手机号判断用户是否存在
 	rsp, err := userClient.GetUserByMobile(c, &proto.MobileRequest{
 		Mobile: passWordLoginForm.Mobile,

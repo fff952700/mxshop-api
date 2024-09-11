@@ -9,6 +9,5 @@ func InitBaseRouter(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("/base")
 	{
 		BaseRouter.GET("/captcha", api.GenerateCaptchaHandler)
-		//BaseRouter.GET("/captcha_verify", api.CaptchaVerifyHandle)
 	}
 }

@@ -70,5 +70,5 @@ func GenerateCaptchaHandler(c *gin.Context) {
 	}
 
 	// respond with captcha id and base64 image
-	c.JSON(http.StatusOK, gin.H{"code": 1, "data": b64s, "captchaId": id, "answer": answer, "msg": "success"})
+	c.JSON(http.StatusOK, gin.H{"code": 1, "data": b64s, "captcha_id": id, "captcha": answer, "msg": "success"})
 }
