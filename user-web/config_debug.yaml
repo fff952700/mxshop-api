@@ -1,9 +1,14 @@
 name: "user-web"
-server-port: 8082
+serverPort: 8082
 
 user-srv:
-  target-host: "127.0.0.1"
-  target-port: 8088
+  targetHost: "127.0.0.1"
+  targetPort: 8088
 
 jwt:
-  SigningKey: "K>Tc.Y+21J!R*v~P%FM==J@xY]i:?sMJ"
+  signingKey: "K>Tc.Y+21J!R*v~P%FM==J@xY]i:?sMJ"
+
+captcha:
+  # type audio,string,math,chinese,
+  type: "chinese"
+  sourceChinese: "的一了是不在的人有我他这中大为上个国我们要和到也你就得着说们国人她"
