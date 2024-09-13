@@ -4,9 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
+	"github.com/mojocn/base64Captcha"
+	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"mxshop-api/user-web/config"
+	"mxshop-api/user-web/proto"
 	"net/http"
 	"strings"
 )
@@ -14,6 +17,11 @@ import (
 var (
 	ServerConf *config.ServerConfig = &config.ServerConfig{}
 	Translator ut.Translator
+	// RedisClient redis客户端
+	RedisClient *redis.Client
+	// RedisStore redis存储桶
+	RedisStore base64Captcha.Store
+	UserClient proto.UserClient
 )
 
 type JWTInfo struct {

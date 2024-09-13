@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"go.uber.org/zap"
-	"mxshop-api/user-web/api"
 	"mxshop-api/user-web/global"
 	"mxshop-api/user-web/initialize"
 )
@@ -21,14 +20,18 @@ func main() {
 	initialize.InitConfig()
 
 	// 3. 初始化svc客户端连接
-	api.InitUserClient()
+	initialize.InitUserClient()
 
-	// 3.初始化router
+	// 4.初始化router
 	initialize.Routers()
-	// 4.初始化翻译
+
+	// 5.初始化翻译
 	if err := initialize.InitValidator("zh"); err != nil {
 		zap.S().Panicw("init validator failed", "msg", err.Error())
 	}
+
+	// 6.初始化redis
+	initialize.InitRedis()
 
 	routers := initialize.Routers()
 	if err := routers.Run(fmt.Sprintf(":%d", global.ServerConf.ServerPort)); err != nil {

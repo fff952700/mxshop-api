@@ -8,6 +8,12 @@ user-srv:
 jwt:
   signingKey: "K>Tc.Y+21J!R*v~P%FM==J@xY]i:?sMJ"
 
+redis:
+  host: "localhost"
+  port: 26379
+  db: 1
+  expirationTime: "5m"
+
 captcha:
   enableCaptcha: true
   # type audio,string,math,chinese,

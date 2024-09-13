@@ -5,10 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
-	"go.uber.org/zap"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 	"mxshop-api/user-web/forms"
 	"mxshop-api/user-web/global"
@@ -21,19 +18,6 @@ import (
 	"net/http"
 )
 
-var conn *grpc.ClientConn
-var userClient proto.UserClient
-
-func InitUserClient() {
-	var err error
-	conn, err = grpc.NewClient(fmt.Sprintf("%s:%d", global.ServerConf.UserServerInfo.Host, global.ServerConf.UserServerInfo.Port), grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		zap.S().Error("【InitUserClient】连接用户服务失败：", err)
-		return
-	}
-	userClient = proto.NewUserClient(conn)
-}
-
 func GetUserList(ctx *gin.Context) {
 	// 获取偏移量和分页数量
 	pn := ctx.DefaultQuery("pn", "0")
@@ -42,7 +26,7 @@ func GetUserList(ctx *gin.Context) {
 
 	pSize := ctx.DefaultQuery("pSize", "25")
 	pSizeInt, _ := strconv.Atoi(pSize)
-	rsp, err := userClient.GetUserList(context.Background(), &proto.PageInfo{
+	rsp, err := global.UserClient.GetUserList(context.Background(), &proto.PageInfo{
 		Pn:    uint32(pnInt),
 		PSize: uint32(pSizeInt),
 	})
@@ -79,18 +63,18 @@ func PassWordLogin(c *gin.Context) {
 		return
 	}
 	// 判断是否开启了验证码校验
-	if global.ServerConf.CaptChaInfo.EnableCaptcha && !store.Verify(passWordLoginForm.CaptchaId, passWordLoginForm.Captcha, true) {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"msg": "验证码错误",
-		})
-		return
+	if global.ServerConf.CaptChaInfo.EnableCaptcha {
+		if !global.RedisStore.Verify(passWordLoginForm.CaptchaId, passWordLoginForm.Captcha, true) {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": "验证码错误",
+			})
+			return
+		}
 	}
-
 	// 通过手机号判断用户是否存在
-	rsp, err := userClient.GetUserByMobile(c, &proto.MobileRequest{
+	rsp, err := global.UserClient.GetUserByMobile(c, &proto.MobileRequest{
 		Mobile: passWordLoginForm.Mobile,
 	})
-	fmt.Printf("user:%v", rsp)
 	if err != nil {
 		if e, ok := status.FromError(err); ok {
 			// 格式化错误成功
@@ -107,7 +91,7 @@ func PassWordLogin(c *gin.Context) {
 		}
 	} else {
 		// 校验密码是否正确
-		verify, _ := userClient.CheckUserPasswd(c, &proto.PasswordCheckInfo{
+		verify, _ := global.UserClient.CheckUserPasswd(c, &proto.PasswordCheckInfo{
 			Password:          passWordLoginForm.Password,
 			EncryptedPassword: rsp.Password,
 		})
