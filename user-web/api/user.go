@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"mxshop-api/user-web/forms"
 	"mxshop-api/user-web/global"
 	"mxshop-api/user-web/middlewares"
@@ -87,8 +85,6 @@ func RegisterUser(c *gin.Context) {
 
 // 用户登陆
 func PassWordLogin(c *gin.Context) {
-	// 表单校验
-	// 实例化表单
 	passWordLoginForm := forms.PassWordLoginForm{}
 	if err := c.ShouldBind(&passWordLoginForm); err != nil {
 		// 使用翻译器进行翻译
@@ -98,6 +94,7 @@ func PassWordLogin(c *gin.Context) {
 	// 判断是否开启了验证码校验
 	if global.ServerConf.CaptChaInfo.EnableCaptcha {
 		if !global.RedisStore.Verify(passWordLoginForm.CaptchaId, passWordLoginForm.Captcha, true) {
+			fmt.Printf("captchaId %s,captcha %s\n", passWordLoginForm.CaptchaId, passWordLoginForm.Captcha)
 			c.JSON(http.StatusBadRequest, gin.H{
 				"msg": "验证码错误",
 			})
@@ -109,40 +106,27 @@ func PassWordLogin(c *gin.Context) {
 		Mobile: passWordLoginForm.Mobile,
 	})
 	if err != nil {
-		if e, ok := status.FromError(err); ok {
-			// 格式化错误成功
-			switch e.Code() {
-			case codes.InvalidArgument:
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"msg": "系统错误",
-				})
-			case codes.NotFound:
-				c.JSON(http.StatusNotFound, gin.H{
-					"msg": "用户不存在",
-				})
-			}
-		}
-	} else {
-		// 校验密码是否正确
-		verify, _ := global.UserClient.CheckUserPasswd(c, &proto.PasswordCheckInfo{
-			Password:          passWordLoginForm.Password,
-			EncryptedPassword: rsp.Password,
-		})
-		if !verify.Success {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"msg": "密码错误",
-			})
-			return
-		}
-		data, err := CreateUserToken(c, rsp)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		}
-		c.JSON(http.StatusOK, gin.H{
-			"msg":  "登陆成功",
-			"data": data,
-		})
+		global.HandleGrpcErrToHttp(err, c)
+		return
 	}
+	// 校验密码是否正确
+	verify, err := global.UserClient.CheckUserPasswd(c, &proto.PasswordCheckInfo{
+		Password:          passWordLoginForm.Password,
+		EncryptedPassword: rsp.Password,
+	})
+	if err != nil {
+		global.HandleGrpcErrToHttp(err, c)
+		return
+	}
+	if !verify.Success {
+		c.JSON(http.StatusUnauthorized, gin.H{"msg": "密码错误"})
+		return
+	}
+	data, err := CreateUserToken(c, rsp)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"msg": err.Error()})
+	}
+	c.JSON(http.StatusOK, gin.H{"msg": "登陆成功", "data": data})
 }
 
 func CreateUserToken(c *gin.Context, rsp *proto.UserInfoResponse) (map[string]interface{}, error) {
