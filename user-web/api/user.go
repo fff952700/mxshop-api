@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"google.golang.org/grpc/codes"
@@ -95,7 +94,6 @@ func PassWordLogin(c *gin.Context) {
 			Password:          passWordLoginForm.Password,
 			EncryptedPassword: rsp.Password,
 		})
-		fmt.Println("result:", verify)
 		if !verify.Success {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"msg": "密码错误",
