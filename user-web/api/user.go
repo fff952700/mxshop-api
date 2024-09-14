@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"google.golang.org/grpc/codes"
@@ -49,6 +50,39 @@ func mapUserData(rsp *proto.UserListResponse) []interface{} {
 		u = append(u, user)
 	}
 	return u
+}
+
+func RegisterUser(c *gin.Context) {
+	passWordLoginForm := forms.PassWordLoginForm{}
+	if err := c.ShouldBind(&passWordLoginForm); err != nil {
+		// 使用翻译器进行翻译
+		global.HandlerValidatorError(c, err)
+		return
+	}
+	// 判断是否开启了验证码校验
+	if global.ServerConf.CaptChaInfo.EnableCaptcha {
+		if !global.RedisStore.Verify(passWordLoginForm.CaptchaId, passWordLoginForm.Captcha, true) {
+			fmt.Printf("captchaId %s,captcha %s\n", passWordLoginForm.CaptchaId, passWordLoginForm.Captcha)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": "验证码错误",
+			})
+			return
+		}
+	}
+	//注册用户
+	rsp, err := global.UserClient.CreateUser(c, &proto.CreateUserInfo{
+		Mobile:   passWordLoginForm.Mobile,
+		Password: passWordLoginForm.Password,
+	})
+	if err != nil {
+		global.HandleGrpcErrToHttp(err, c)
+		return
+	}
+	data, err := CreateUserToken(c, rsp)
+	c.JSON(http.StatusOK, gin.H{
+		"msg":  "注册成功",
+		"data": data,
+	})
 }
 
 // 用户登陆
@@ -100,32 +134,38 @@ func PassWordLogin(c *gin.Context) {
 			})
 			return
 		}
-		// 实例化jwt对象
-		j := middlewares.NewJWT()
-		// 实例化claims
-		claims := models.CustomClaims{
-			ID:          uint(rsp.Id),
-			NickName:    rsp.Nickname,
-			AuthorityId: uint(rsp.Role),
-			RegisteredClaims: jwt.RegisteredClaims{
-				ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
-				Issuer:    "test",
-			},
-		}
-		// 创建token
-		token, err := j.CreateToken(claims)
+		data, err := CreateUserToken(c, rsp)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"msg": "创建token失败",
-			})
-		}
-		data := map[string]interface{}{
-			"Token":     token,
-			"ExpiresAt": time.Now().Unix() + 60*60,
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"msg":  "登陆成功",
 			"data": data,
 		})
 	}
+}
+
+func CreateUserToken(c *gin.Context, rsp *proto.UserInfoResponse) (map[string]interface{}, error) {
+	// 实例化jwt对象
+	j := middlewares.NewJWT()
+	// 实例化claims
+	claims := models.CustomClaims{
+		ID:          uint(rsp.Id),
+		NickName:    rsp.Nickname,
+		AuthorityId: uint(rsp.Role),
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
+			Issuer:    "test",
+		},
+	}
+	// 创建token
+	token, err := j.CreateToken(claims)
+	if err != nil {
+		return nil, fmt.Errorf("创建token失败")
+	}
+	data := map[string]interface{}{
+		"Token":     token,
+		"ExpiresAt": time.Now().Unix() + 60*60,
+	}
+	return data, nil
 }
