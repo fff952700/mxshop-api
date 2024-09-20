@@ -1,5 +1,15 @@
 package config
 
+type ServerConfig struct {
+	ServerName     string           `mapstructure:"name"`
+	ServerPort     int              `mapstructure:"serverPort"`
+	UserServerInfo UserServerConfig `mapstructure:"user-srv"`
+	JWTInfo        JwtConfig        `mapstructure:"jwt"`
+	CaptChaInfo    CaptchaConfig    `mapstructure:"captcha"`
+	RedisInfo      RedisConfig      `mapstructure:"redis"`
+	ConsulInfo     ConsulConfig     `mapstructure:"consul"`
+}
+
 type UserServerConfig struct {
 	Host string `mapstructure:"targetHost"`
 	Port int    `mapstructure:"targetPort"`
@@ -22,11 +32,8 @@ type RedisConfig struct {
 	ExpirationTime string `mapstructure:"expirationTime"`
 }
 
-type ServerConfig struct {
-	ServerName     string           `mapstructure:"name"`
-	ServerPort     int              `mapstructure:"serverPort"`
-	UserServerInfo UserServerConfig `mapstructure:"user-srv"`
-	JWTInfo        JwtConfig        `mapstructure:"jwt"`
-	CaptChaInfo    CaptchaConfig    `mapstructure:"captcha"`
-	RedisInfo      RedisConfig      `mapstructure:"redis"`
+type ConsulConfig struct {
+	Host    string `mapstructure:"host"`
+	Port    int    `mapstructure:"port"`
+	SrvName string `mapstructure:"srvName"`
 }

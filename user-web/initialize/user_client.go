@@ -3,22 +3,44 @@ package initialize
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/consul/api"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
 	"mxshop-api/user-web/global"
 	"mxshop-api/user-web/proto"
 )
 
 func InitUserClient() {
+	// 通过consul获取
+	cfg := api.DefaultConfig()
+	cfg.Address = fmt.Sprintf("%s:%d", global.ServerConf.ConsulInfo.Host, global.ServerConf.ConsulInfo.Port)
+	client, err := api.NewClient(cfg)
+	if err != nil {
+		zap.S().Panicw("Init Consul Client Failed", "msg", err.Error())
+	}
+	data, err := client.Agent().ServicesWithFilter(fmt.Sprintf("Service == \"%s\"", global.ServerConf.ConsulInfo.SrvName))
+	if err != nil {
+		zap.S().Panicw("Init Consul filter Failed", "msg", err.Error())
+	}
+	userSrvHost := ""
+	userSrvPort := 0
+	for _, v := range data {
+		fmt.Printf("value %+v\n", v)
+		userSrvHost = v.Address
+		userSrvPort = v.Port
+		break
+	}
+	fmt.Printf("%s:%d\n", userSrvHost, userSrvPort)
 	// 使用 gRPC 客户端 API 创建连接
 	conn, err := grpc.NewClient(
-		fmt.Sprintf("%s:%d", global.ServerConf.UserServerInfo.Host, global.ServerConf.UserServerInfo.Port),
+		fmt.Sprintf("%s:%d", userSrvHost, userSrvPort),
 		grpc.WithTransportCredentials(insecure.NewCredentials()), // 不加密连接
 	)
 
 	if err != nil {
-		zap.S().Panicw("init UserClient failed", "msg", err.Error())
+		zap.S().Panicw("Init UserClient Failed", "msg", err.Error())
 		return
 	}
 	// 连接成功后，设置全局的 UserClient
@@ -29,7 +51,7 @@ func InitUserClient() {
 	})
 
 	if err != nil {
-		zap.S().Panicw("init UserClient failed", "msg", err.Error())
+		zap.S().Panicw("Init UserClient Failed", "msg", err.Error())
 		return
 	}
 

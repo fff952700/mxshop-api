@@ -2,7 +2,7 @@ name: "user-web"
 serverPort: 8082
 
 user-srv:
-  targetHost: "127.0.0.1"
+  targetHost: "192.168.2.113"
   targetPort: 8088
 
 jwt:
@@ -19,3 +19,8 @@ captcha:
   # type audio,string,math,chinese,
   type: "math"
   sourceChinese: "的一了是不在的人有我他这中大为上个国我们要和到也你就得着说们国人她"
+
+consul:
+  host: "127.0.0.1"
+  port: 8500
+  srvName: "user-srv"
