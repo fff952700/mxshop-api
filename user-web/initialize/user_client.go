@@ -27,7 +27,6 @@ func InitUserClient() {
 	userSrvHost := ""
 	userSrvPort := 0
 	for _, v := range data {
-		fmt.Printf("value %+v\n", v)
 		userSrvHost = v.Address // 需要在服务注册的时候传入address和port 否则读取为nil
 		userSrvPort = v.Port
 		break
