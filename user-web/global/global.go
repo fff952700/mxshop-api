@@ -16,7 +16,8 @@ import (
 )
 
 var (
-	ServerConf  *config.Cfg = &config.Cfg{}
+	ServerConf  = &config.Cfg{}
+	NacosConf   = &config.NacosConfig{}
 	Translator  ut.Translator
 	UserClient  proto.UserClient
 	RedisClient *redis.Client

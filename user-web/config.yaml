@@ -1,0 +1,37 @@
+# 因为使用nacos所以本地只需要配置nacos相关信息
+host: "192.168.2.105"
+port: 8848
+scheme: "http"
+namespace: "09d89590-bb9a-4218-8b67-db9ac8364bba"
+dataId: "user-api"
+group: "dev"
+
+#serverNme: "user-web"
+#serverPort: 8081
+#userSrv:
+#  targetHost: "127.0.0.1"
+#  targetPort: 8080
+#  serviceName: "user-srv"
+#
+#jwt:
+#  SigningKey: "sHAY*g=N,0eN}+b1FYo+c]!CwAw^4kVm"
+#
+#captcha:
+#  enableCaptcha: true
+#  # type audio,string,math,chinese,
+#  type: "math"
+#  sourceChinese: "的一了是不在的人有我他这中大为上个国我们要和到也你就得着说们国人她"
+#
+#redis:
+#  host: "localhost"
+#  port: 26379
+#  db: 1
+#  expirationTime: "5m"
+#
+#consul:
+#  host: "192.168.2.108"
+#  port: 8500
+#  target: "srv"
+#  targetServerName: "user-srv"
+#
+#timezone: "Asia/Shanghai"

@@ -4,7 +4,8 @@
 3、update init  
 4、add redis storage  
 5、add global UserClient RedisStorage RedisClient  
-6、add docker-compose.yaml
+6、add docker-compose.yaml  
+7、add nacos
 
 ### protoc 使用
 protoc

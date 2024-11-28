@@ -161,7 +161,7 @@ func CreateUserToken(c *gin.Context, rsp *proto.UserInfoResponse) (map[string]in
 		AuthorityId: uint(rsp.Role),
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
-			Issuer:    "test",
+			Issuer:    "tests",
 		},
 	}
 	// 创建token
