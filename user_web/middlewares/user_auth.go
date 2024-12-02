@@ -4,7 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"mxshop-api/user-web/models"
+
+	"mxshop_api/user_web/models"
 )
 
 // IsAdminAuth 中间件，检查用户是否为管理员

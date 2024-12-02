@@ -3,13 +3,14 @@ package initialize
 import (
 	"context"
 	"fmt"
+
 	_ "github.com/mbobakov/grpc-consul-resolver" // It's important
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"mxshop-api/user-web/global"
-	"mxshop-api/user-web/proto"
+	"mxshop_api/user_web/global"
+	"mxshop_api/user_web/proto"
 )
 
 func InitUserClient() {

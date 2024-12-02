@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"go.uber.org/zap"
-	"mxshop-api/user-web/global"
-	"mxshop-api/user-web/initialize"
-	"mxshop-api/user-web/utils"
+	"mxshop_api/user_web/global"
+	"mxshop_api/user_web/initialize"
+	"mxshop_api/user_web/utils"
 	"os"
 	"os/signal"
 	"syscall"

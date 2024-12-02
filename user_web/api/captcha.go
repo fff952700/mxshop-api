@@ -1,11 +1,12 @@
-// api/captcha.go
 package api
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
-	"mxshop-api/user-web/global"
-	"net/http"
+
+	"mxshop_api/user_web/global"
 )
 
 func GenerateCaptchaHandler(c *gin.Context) {

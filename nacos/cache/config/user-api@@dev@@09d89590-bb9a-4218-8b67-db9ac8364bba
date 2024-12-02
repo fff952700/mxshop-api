@@ -1,5 +1,5 @@
 {
-  "serverNme": "user-web",
+  "serverNme": "user_web",
   "serverPort": 8081,
   "jwt": {
     "SigningKey": "sHAY*g=N,0eN}+b1FYo+c]!CwAw^4kVm"

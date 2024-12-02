@@ -3,19 +3,21 @@ package initialize
 import (
 	"encoding/json"
 	"fmt"
+	"time"
+
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
-	"mxshop-api/user-web/global"
-	"time"
+
+	"mxshop_api/user_web/global"
 )
 
 // InitConfig 通过先通过viper获取本地nacos配置在获取服务配置
 func InitConfig() {
 	v := viper.New()
-	v.SetConfigFile("user-web/config.yaml")
+	v.SetConfigFile("user_web/config.yaml")
 	if err := v.ReadInConfig(); err != nil {
 		zap.S().Panicw("read config failed", "err", err)
 	}
@@ -87,9 +89,9 @@ func InitConfig() {
 //func InitConfig() {
 //	debug := GetEnvInfo("MXSHOP_DEBUG")
 //	configFilePrefix := "config"
-//	configFileName := fmt.Sprintf("user-web/%s_pro.yaml", configFilePrefix)
+//	configFileName := fmt.Sprintf("user_web/%s_pro.yaml", configFilePrefix)
 //	if debug {
-//		configFileName = fmt.Sprintf("user-web/%s_debug.yaml", configFilePrefix)
+//		configFileName = fmt.Sprintf("user_web/%s_debug.yaml", configFilePrefix)
 //	}
 //	v := viper.New()
 //	// 设置文件路径

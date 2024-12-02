@@ -6,7 +6,7 @@ namespace: "09d89590-bb9a-4218-8b67-db9ac8364bba"
 dataId: "user-api"
 group: "dev"
 
-#serverNme: "user-web"
+#serverNme: "user_web"
 #serverPort: 8081
 #userSrv:
 #  targetHost: "127.0.0.1"

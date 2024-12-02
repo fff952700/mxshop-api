@@ -2,18 +2,19 @@ package api
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
-	"github.com/golang-jwt/jwt/v5"
-	"mxshop-api/user-web/forms"
-	"mxshop-api/user-web/global"
-	middlewares "mxshop-api/user-web/middlewares"
-	"mxshop-api/user-web/models"
+	"net/http"
 	"strconv"
 	"time"
 
-	"mxshop-api/user-web/proto"
-	"net/http"
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v5"
+
+	"mxshop_api/user_web/forms"
+	"mxshop_api/user_web/global"
+	"mxshop_api/user_web/middlewares"
+	"mxshop_api/user_web/models"
+	"mxshop_api/user_web/proto"
 )
 
 func GetUserList(c *gin.Context) {

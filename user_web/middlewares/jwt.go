@@ -2,14 +2,15 @@ package middlewares
 
 import (
 	"errors"
-	"github.com/golang-jwt/jwt/v5"
-	"go.uber.org/zap"
-	"mxshop-api/user-web/global"
-	"mxshop-api/user-web/models"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
+	"go.uber.org/zap"
+
+	"mxshop_api/user_web/global"
+	"mxshop_api/user_web/models"
 )
 
 func JWTAuth() gin.HandlerFunc {

@@ -3,11 +3,13 @@ package initialize
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
-	"mxshop-api/user-web/global"
-	"mxshop-api/user-web/storage"
-	"time"
+
+	"mxshop_api/user_web/global"
+	"mxshop_api/user_web/storage"
 )
 
 func InitRedis() {

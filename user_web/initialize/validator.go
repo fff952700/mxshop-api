@@ -13,8 +13,8 @@ import (
 	en_translations "github.com/go-playground/validator/v10/translations/en"
 	zh_translations "github.com/go-playground/validator/v10/translations/zh"
 
-	"mxshop-api/user-web/global"
-	myValidator "mxshop-api/user-web/validator"
+	"mxshop_api/user_web/global"
+	myValidator "mxshop_api/user_web/validator"
 )
 
 func InitValidator(locale string) (err error) {
@@ -52,12 +52,12 @@ func InitValidator(locale string) (err error) {
 	return nil
 }
 
-//自定义验证器初始化
+// 自定义验证器初始化
 func initCustomizeValidator(v *validator.Validate) {
 	checkMobile(v)
 }
 
-//注册mobile验证器
+// 注册mobile验证器
 func checkMobile(v *validator.Validate) {
 	v.RegisterValidation("mobile", myValidator.ValidateMobile)
 	v.RegisterTranslation("mobile", global.Translator, func(ut ut.Translator) error {

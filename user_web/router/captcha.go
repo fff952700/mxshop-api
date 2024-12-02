@@ -2,7 +2,8 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"mxshop-api/user-web/api"
+
+	"mxshop_api/user_web/api"
 )
 
 func InitBaseRouter(Router *gin.RouterGroup) {

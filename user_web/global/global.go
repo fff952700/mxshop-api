@@ -2,17 +2,19 @@ package global
 
 import (
 	"encoding/json"
+	"net/http"
+	"strings"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"mxshop-api/user-web/config"
-	"mxshop-api/user-web/proto"
-	"mxshop-api/user-web/storage"
-	"net/http"
-	"strings"
-	"time"
+
+	"mxshop_api/user_web/config"
+	"mxshop_api/user_web/proto"
+	"mxshop_api/user_web/storage"
 )
 
 var (

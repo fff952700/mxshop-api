@@ -2,9 +2,11 @@ package initialize
 
 import (
 	"fmt"
+
 	"github.com/hashicorp/consul/api"
 	"go.uber.org/zap"
-	"mxshop-api/user-web/global"
+
+	"mxshop_api/user_web/global"
 )
 
 // InitConsul 从consul获取service user-srv

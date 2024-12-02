@@ -2,10 +2,11 @@ package tests
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
-	"testing"
 )
 
 func TestNacos(t *testing.T) {
