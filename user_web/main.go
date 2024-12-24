@@ -12,18 +12,18 @@ import (
 )
 
 func main() {
-	// 1. 初始化zap日志
-	initialize.InitLogger()
-
-	// 2.获取配置文件
-	initialize.InitConfig()
-
-	// 3.加载时区，在jwt验证token使用
-	initialize.InitTimeZone()
-	// 3. 初始consul 获取svc客户端连接地址
-	initialize.InitConsul()
-	// 3. 初始化svc客户端连接
-	initialize.InitUserClient()
+	//// 1. 初始化zap日志
+	//initialize.InitLogger()
+	//
+	//// 2.获取配置文件
+	//initialize.InitConfig()
+	//
+	//// 3.加载时区，在jwt验证token使用
+	//initialize.InitTimeZone()
+	//// 3. 初始consul 获取svc客户端连接地址
+	//initialize.InitConsul()
+	//// 3. 初始化svc客户端连接
+	//initialize.InitUserClient()
 
 	// 4.初始化router
 	routers := initialize.Routers()
@@ -34,7 +34,7 @@ func main() {
 	}
 
 	// 6.初始化redis
-	initialize.InitRedis()
+	//initialize.InitRedis()
 
 	// 7.服务发现
 	go func() {

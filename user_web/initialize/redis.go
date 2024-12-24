@@ -12,7 +12,7 @@ import (
 	"mxshop_api/user_web/storage"
 )
 
-func InitRedis() {
+func init() {
 	Client := redis.NewClient(
 		&redis.Options{
 			Addr: fmt.Sprintf("%s:%d", global.ServerConf.RedisInfo.Host, global.ServerConf.RedisInfo.Port),

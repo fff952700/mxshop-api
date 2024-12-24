@@ -13,13 +13,13 @@ import (
 	"mxshop_api/user_web/proto"
 )
 
-func InitUserClient() {
+func init() {
 	//conn, err := grpc.NewClient(fmt.Sprintf("%s:%d", global.ServerConf.UserServerInfo.Host, global.ServerConf.UserServerInfo.Port), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	// 通过consul 注册resolver 添加lb算法
 	// consul://[user:password@]127.0.0.127:8555/my-service?[healthy=]&[wait=]&[near=]&[insecure=]&[limit=]&[tag=]&[token=]
 
 	cfg := global.ServerConf.ConsulInfo
-	conn, err := grpc.NewClient(fmt.Sprintf("consul://%s:%d/%s?wait=%d&tag=%s", cfg.Host, cfg.Port,
+	conn, err := grpc.NewClient(fmt.Sprintf("consul://%s:%d/%s?wait=%s&tag=%s", cfg.Host, cfg.Port,
 		cfg.TargetServerName, "14s", cfg.Target),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`),

@@ -3,7 +3,6 @@ package initialize
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
@@ -15,9 +14,15 @@ import (
 )
 
 // InitConfig 通过先通过viper获取本地nacos配置在获取服务配置
-func InitConfig() {
+func init() {
 	v := viper.New()
-	v.SetConfigFile("user_web/config.yaml")
+	debug := GetEnvInfo("MXSHOP_DEBUG")
+	configFilePrefix := "config"
+	configFileName := fmt.Sprintf("user_web/%s_pro.yaml", configFilePrefix)
+	if debug {
+		configFileName = fmt.Sprintf("user_web/%s_prev.yaml", configFilePrefix)
+	}
+	v.SetConfigFile(configFileName)
 	if err := v.ReadInConfig(); err != nil {
 		zap.S().Panicw("read config failed", "err", err)
 	}
@@ -32,8 +37,8 @@ func InitConfig() {
 		NamespaceId:         global.NacosConf.Namespace, // 如果需要支持多namespace，我们可以创建多个client,它们有不同的NamespaceId。当namespace是public时，此处填空字符串。
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
-		LogDir:              "nacos/log",
-		CacheDir:            "nacos/cache",
+		LogDir:              "./user_web/nacos/log",
+		CacheDir:            "./user_web/nacos/cache",
 		LogLevel:            "debug",
 	}
 	// 至少一个ServerConfig
@@ -120,11 +125,4 @@ func InitConfig() {
 func GetEnvInfo(env string) bool {
 	viper.AutomaticEnv()
 	return viper.GetBool(env)
-}
-
-// InitTimeZone 设置时区
-func InitTimeZone() {
-	cst, _ := time.LoadLocation(global.ServerConf.TimeZone)
-	global.TimeZone = cst
-
 }

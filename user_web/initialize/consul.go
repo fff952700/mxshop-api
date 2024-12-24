@@ -10,7 +10,7 @@ import (
 )
 
 // InitConsul 从consul获取service user-srv
-func InitConsul() {
+func init() {
 	config := api.DefaultConfig()
 	ConsulInfo := global.ServerConf.ConsulInfo
 	config.Address = fmt.Sprintf("%s:%d", ConsulInfo.Host, ConsulInfo.Port)
