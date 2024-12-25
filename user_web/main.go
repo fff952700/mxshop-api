@@ -19,12 +19,6 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	// 初始化router
 	routers := initialize.Routers()
-
-	// 初始化翻译器
-	if err := initialize.InitValidator("zh"); err != nil {
-		zap.L().Panic("init validator failed", zap.Error(err))
-	}
-
 	// 服务发现
 	go func() {
 		// 模拟本地服务多部署，使用随机端口，正式使用k8s则无需使用 通过yapi测试不方便所有不开启
@@ -38,9 +32,9 @@ func main() {
 			}
 			global.Cfg.ServerInfo.Port = port
 		}
-		serverPort := global.Cfg.ServerInfo.Port
-		zap.S().Infof("%s service start succees :%d", serverName, serverPort)
-		if err := routers.Run(fmt.Sprintf(":%d", serverPort)); err != nil {
+		svc := global.Cfg.ServerInfo
+		zap.S().Infof("%s service start succees %s:%d", svc.Name, svc.Host, svc.Port)
+		if err := routers.Run(fmt.Sprintf(":%d", svc.Port)); err != nil {
 			zap.S().Panicf("%s service start error %v", serverName, err.Error())
 		}
 	}()

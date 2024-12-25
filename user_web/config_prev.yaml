@@ -1,4 +1,3 @@
-# 因为使用nacos所以本地只需要配置nacos相关信息
 host: "192.168.2.150"
 port: 8848
 scheme: "http"
@@ -7,6 +6,7 @@ dataId: "user-api"
 group: "dev"
 
 #server:
+#  host: "192.168.2.150"
 #  name: "user_web"
 #  port: 8081
 #  timezone: "Asia/Shanghai"
