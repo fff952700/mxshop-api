@@ -15,8 +15,8 @@ import (
 func init() {
 	Client := redis.NewClient(
 		&redis.Options{
-			Addr: fmt.Sprintf("%s:%d", global.ServerConf.RedisInfo.Host, global.ServerConf.RedisInfo.Port),
-			DB:   global.ServerConf.RedisInfo.DB,
+			Addr: fmt.Sprintf("%s:%d", global.Cfg.RedisInfo.Host, global.Cfg.RedisInfo.Port),
+			DB:   global.Cfg.RedisInfo.DB,
 		})
 	_, err := Client.Ping(context.Background()).Result()
 	if err != nil {
@@ -25,7 +25,7 @@ func init() {
 	global.RedisClient = Client
 	// 初始化存储桶
 	// 解析时间
-	ExpirationTime, err := time.ParseDuration(global.ServerConf.RedisInfo.ExpirationTime)
+	ExpirationTime, err := time.ParseDuration(global.Cfg.RedisInfo.ExpirationTime)
 	if err != nil {
 		zap.S().Panicw("parse expiration time failed", "err", err.Error())
 	}

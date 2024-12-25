@@ -1,24 +1,21 @@
 package config
 
-type UserServerConfig struct {
-	Host        string
-	Port        int
-	ServiceName string
+type ServerConfig struct {
+	Port     int    `mapstructure:"port" json:"port"`
+	Name     string `mapstructure:"name" json:"name"`
+	TimeZone string `mapstructure:"timeZone" json:"timeZone"`
 }
 
 type Cfg struct {
-	ServerConfig   string `mapstructure:"serverNme" json:"serverNme"`
-	ServerPort     int    `mapstructure:"serverPort" json:"serverPort"`
-	TimeZone       string `mapstructure:"timeZone" json:"timeZone"`
-	UserServerInfo UserServerConfig
-	JWTInfo        JwtConfig     `mapstructure:"jwt" json:"jwt"`
-	CaptchaInfo    CaptchaConfig `mapstructure:"captcha" json:"captcha"`
-	RedisInfo      RedisConfig   `mapstructure:"redis" json:"redis"`
-	ConsulInfo     ConsulConfig  `mapstructure:"consul" json:"consul"`
+	ServerInfo  ServerConfig  `mapstructure:"server" json:"server"`
+	JWTInfo     JwtConfig     `mapstructure:"jwt" json:"jwt"`
+	CaptchaInfo CaptchaConfig `mapstructure:"captcha" json:"captcha"`
+	RedisInfo   RedisConfig   `mapstructure:"redis" json:"redis"`
+	ConsulInfo  ConsulConfig  `mapstructure:"consul" json:"consul"`
 }
 
 type JwtConfig struct {
-	SigningKey string `mapstructure:"SigningKey" json:"SigningKey"`
+	SigningKey string `mapstructure:"signingKey" json:"signingKey"`
 }
 
 type CaptchaConfig struct {

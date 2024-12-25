@@ -63,7 +63,7 @@ var (
 
 func NewJWT() *JWT {
 	return &JWT{
-		[]byte(global.ServerConf.JWTInfo.SigningKey),
+		[]byte(global.Cfg.JWTInfo.SigningKey),
 	}
 }
 

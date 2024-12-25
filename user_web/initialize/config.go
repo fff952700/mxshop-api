@@ -41,7 +41,7 @@ func init() {
 		CacheDir:            "./user_web/nacos/cache",
 		LogLevel:            "debug",
 	}
-	// 至少一个ServerConfig
+	// 至少一个Cfgig
 	sc := []constant.ServerConfig{
 		{
 			IpAddr:      global.NacosConf.Host,
@@ -83,11 +83,11 @@ func init() {
 
 	// 将json序列化为struct
 	// 实例化配置对象
-	serverConfig := global.ServerConf
-	if err = json.Unmarshal([]byte(content), &serverConfig); err != nil {
+	Cfgig := global.Cfg
+	if err = json.Unmarshal([]byte(content), &Cfgig); err != nil {
 		zap.S().Panicw("unmarshal config failed", "err", err)
 	}
-	zap.S().Infow("server config", "serverConfig", serverConfig)
+	zap.S().Infow("server config", "Cfgig", Cfgig)
 }
 
 // 通过viper监听本地配置文件
@@ -105,8 +105,8 @@ func init() {
 //		panic(err)
 //	}
 //	// 实例化配置结构体
-//	serverConfig := global.ServerConf
-//	if err := v.Unmarshal(serverConfig); err != nil {
+//	Cfgig := global.Cfg
+//	if err := v.Unmarshal(Cfgig); err != nil {
 //		panic(err)
 //	}
 //	// viper 动态监听变化
@@ -115,8 +115,8 @@ func init() {
 //		// 重新读取
 //		_ = v.ReadInConfig()
 //		// 重新解析
-//		_ = v.Unmarshal(serverConfig)
-//		fmt.Printf("%+v\n", serverConfig)
+//		_ = v.Unmarshal(Cfgig)
+//		fmt.Printf("%+v\n", Cfgig)
 //
 //	})
 //}

@@ -19,8 +19,8 @@ func TestNacos(t *testing.T) {
 		CacheDir:            "nacos/cache",
 		LogLevel:            "debug",
 	}
-	// 至少一个ServerConfig
-	serverConfigs := []constant.ServerConfig{
+	// 至少一个Cfgig
+	Cfgigs := []constant.ServerConfig{
 		{
 			IpAddr:      "192.168.2.105",
 			ContextPath: "/nacos",
@@ -33,7 +33,7 @@ func TestNacos(t *testing.T) {
 	configClient, err := clients.NewConfigClient(
 		vo.NacosClientParam{
 			ClientConfig:  &clientConfig,
-			ServerConfigs: serverConfigs,
+			ServerConfigs: Cfgigs,
 		},
 	)
 	if err != nil {

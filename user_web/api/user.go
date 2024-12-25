@@ -81,7 +81,7 @@ func ValidateAndCheckCaptcha(c *gin.Context, form interface{}, captchaEnabled bo
 // 用户注册
 func RegisterUser(c *gin.Context) {
 	passWordLoginForm := forms.PassWordLoginForm{}
-	err := ValidateAndCheckCaptcha(c, &passWordLoginForm, global.ServerConf.CaptchaInfo.EnableCaptcha)
+	err := ValidateAndCheckCaptcha(c, &passWordLoginForm, global.Cfg.CaptchaInfo.EnableCaptcha)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
 		return
@@ -112,7 +112,7 @@ func RegisterUser(c *gin.Context) {
 // 校验用户登录
 func PassWordLoginForms(c *gin.Context) {
 	passWordLoginForm := forms.PassWordLoginForm{}
-	err := ValidateAndCheckCaptcha(c, &passWordLoginForm, global.ServerConf.CaptchaInfo.EnableCaptcha)
+	err := ValidateAndCheckCaptcha(c, &passWordLoginForm, global.Cfg.CaptchaInfo.EnableCaptcha)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
 		return

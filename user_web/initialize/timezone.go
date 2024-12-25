@@ -8,7 +8,7 @@ import (
 
 // InitTimeZone 设置时区
 func init() {
-	cst, _ := time.LoadLocation(global.ServerConf.TimeZone)
+	cst, _ := time.LoadLocation(global.Cfg.ServerInfo.TimeZone)
 	global.TimeZone = cst
 
 }

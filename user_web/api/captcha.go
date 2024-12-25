@@ -11,7 +11,7 @@ import (
 
 func GenerateCaptchaHandler(c *gin.Context) {
 	var driver base64Captcha.Driver
-	info := global.ServerConf.CaptchaInfo
+	info := global.Cfg.CaptchaInfo
 
 	// Choose the captcha driver based on configuration
 	switch info.Type {

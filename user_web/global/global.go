@@ -18,7 +18,7 @@ import (
 )
 
 var (
-	ServerConf  = &config.Cfg{}
+	Cfg         = &config.Cfg{}
 	NacosConf   = &config.NacosConfig{}
 	Translator  ut.Translator
 	UserClient  proto.UserClient
