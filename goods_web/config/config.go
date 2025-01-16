@@ -1,10 +1,12 @@
 package config
 
 type ServerConfig struct {
-	Host     string `mapstructure:"host" json:"host"`
-	Port     int    `mapstructure:"port" json:"port"`
-	Name     string `mapstructure:"name" json:"name"`
-	TimeZone string `mapstructure:"timeZone" json:"timeZone"`
+	Host     string   `mapstructure:"host" json:"host"`
+	Port     int      `mapstructure:"port" json:"port"`
+	Name     string   `mapstructure:"name" json:"name"`
+	Id       string   `mapstructure:"id" json:"id"`
+	Tag      []string `mapstructure:"tag" json:"tag"`
+	TimeZone string   `mapstructure:"timeZone" json:"timeZone"`
 }
 
 type Cfg struct {

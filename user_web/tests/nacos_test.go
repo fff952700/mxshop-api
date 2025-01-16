@@ -15,15 +15,15 @@ func TestNacos(t *testing.T) {
 		NamespaceId:         "09d89590-bb9a-4218-8b67-db9ac8364bba", // 如果需要支持多namespace，我们可以创建多个client,它们有不同的NamespaceId。当namespace是public时，此处填空字符串。
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
-		LogDir:              "nacos/log",
-		CacheDir:            "nacos/cache",
+		LogDir:              "consul/log",
+		CacheDir:            "consul/cache",
 		LogLevel:            "debug",
 	}
 	// 至少一个Cfgig
 	Cfgigs := []constant.ServerConfig{
 		{
 			IpAddr:      "192.168.2.105",
-			ContextPath: "/nacos",
+			ContextPath: "/consul",
 			Port:        8848,   // 使用 HTTP 端口
 			Scheme:      "http", // 强制使用 HTTP 协议
 		},

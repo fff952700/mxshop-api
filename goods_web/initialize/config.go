@@ -30,22 +30,22 @@ func init() {
 	if err := v.Unmarshal(global.NacosConf); err != nil {
 		zap.S().Panicw("unmarshal config failed", "err", err)
 	}
-	zap.S().Infof("nacos config :%v", global.NacosConf)
+	zap.S().Infof("consul config :%v", global.NacosConf)
 
 	// 创建clientConfig
 	cc := constant.ClientConfig{
 		NamespaceId:         global.NacosConf.Namespace, // 如果需要支持多namespace，我们可以创建多个client,它们有不同的NamespaceId。当namespace是public时，此处填空字符串。
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
-		LogDir:              "./goods_web/nacos/log",
-		CacheDir:            "./goods_web/nacos/cache",
+		LogDir:              "./goods_web/consul/log",
+		CacheDir:            "./goods_web/consul/cache",
 		LogLevel:            "debug",
 	}
 	// 至少一个ServerConfig
 	sc := []constant.ServerConfig{
 		{
 			IpAddr:      global.NacosConf.Host,
-			ContextPath: "/nacos",
+			ContextPath: "/consul",
 			Port:        uint64(global.NacosConf.Port), // 使用 HTTP 端口
 			Scheme:      global.NacosConf.Scheme,       // 强制使用 HTTP 协议
 		},

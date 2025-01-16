@@ -2,6 +2,7 @@ package global
 
 import (
 	"encoding/json"
+	"github.com/hashicorp/consul/api"
 	"net/http"
 	"strings"
 	"time"
@@ -16,11 +17,12 @@ import (
 )
 
 var (
-	Cfg         = &config.Cfg{}
-	NacosConf   = &config.NacosConfig{}
-	Translator  ut.Translator
-	GoodsClient proto.GoodsClient
-	TimeZone    *time.Location
+	Cfg          = &config.Cfg{}
+	NacosConf    = &config.NacosConfig{}
+	Translator   ut.Translator
+	GoodsClient  proto.GoodsClient
+	TimeZone     *time.Location
+	ConsulClient *api.Client
 )
 
 // HandleGrpcErrToHttp 将grpc状态码转换为http
