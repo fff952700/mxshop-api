@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/nacos-group/nacos-sdk-go/v2/inner/uuid"
 	"mxshop_api/goods_web/utils/register/consul"
 	"os"
 	"os/signal"
@@ -36,7 +37,12 @@ func main() {
 			}
 			global.Cfg.ServerInfo.Port = port
 		}
-		err := client.Register()
+		id, err := uuid.NewV4()
+		if err != nil {
+			zap.S().Panic(err)
+		}
+		global.Cfg.ServerInfo.Id = id.String()
+		err = client.Register()
 		if err != nil {
 			zap.S().Panicf("%s register err %v", svc.Name, err.Error())
 		}

@@ -83,3 +83,33 @@ func List(ctx *gin.Context) {
 	responseMap["data"] = goodsList
 	ctx.JSON(http.StatusOK, responseMap)
 }
+
+func Detail(ctx *gin.Context) {
+	// 获取商品id
+	id := ctx.Query("id")
+	i, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+	r, err := global.GoodsClient.GetGoodsDetail(ctx, &proto.GoodInfoRequest{Id: int32(i)})
+	if err != nil {
+		global.HandleGrpcErrToHttp(err, ctx)
+	}
+	rsp := map[string]interface{}{
+		"id":          r.Id,
+		"category_id": r.CategoryId,
+		"name":        r.Name,
+		"goods_brief": r.GoodsBrief,
+		"desc":        r.GoodsDesc,
+		"ship_free":   r.ShipFree,
+		"desc_image":  r.DescImages,
+		"front_image": r.GoodsFrontImage,
+		"shop_price":  r.ShopPrice,
+		"is_host":     r.IsHot,
+		"is_new":      r.IsNew,
+		"on_sale":     r.OnSale,
+	}
+	ctx.JSON(http.StatusOK, rsp)
+
+}

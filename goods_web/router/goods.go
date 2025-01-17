@@ -9,5 +9,6 @@ func InitGoodsRouter(Router *gin.RouterGroup) {
 	GoodsGroup := Router.Group("goods")
 	{
 		GoodsGroup.GET("/list", goods.List)
+		GoodsGroup.GET("/detail", goods.Detail)
 	}
 }
