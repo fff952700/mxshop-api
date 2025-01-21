@@ -126,7 +126,6 @@ func PassWordLoginForms(c *gin.Context) {
 		global.HandleGrpcErrToHttp(err, c)
 		return
 	}
-
 	// 校验密码
 	verify, err := global.UserClient.CheckUserPasswd(c, &proto.PasswordCheckInfo{
 		Password:          passWordLoginForm.Password,

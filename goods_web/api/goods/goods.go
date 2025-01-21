@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"mxshop_api/goods_web/forms"
 	"mxshop_api/goods_web/global"
 	"mxshop_api/goods_web/proto"
 	"net/http"
@@ -11,49 +12,26 @@ import (
 )
 
 func List(ctx *gin.Context) {
-
-	request := &proto.GoodsFilterRequest{}
-
-	priceMin := ctx.DefaultQuery("pmin", "0")
-	priceMinInt, _ := strconv.Atoi(priceMin)
-	request.PriceMin = int32(priceMinInt)
-
-	priceMax := ctx.DefaultQuery("pmax", "0")
-	priceMaxInt, _ := strconv.Atoi(priceMax)
-	request.PriceMax = int32(priceMaxInt)
-
-	isHot := ctx.DefaultQuery("ih", "0")
-	if isHot == "1" {
-		request.IsHot = true
+	var goodsForm forms.GoodsFilter
+	if err := ctx.ShouldBindQuery(&goodsForm); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid query parameters"})
+		return
 	}
-	isNew := ctx.DefaultQuery("in", "0")
-	if isNew == "1" {
-		request.IsNew = true
+	request := &proto.GoodsFilterRequest{
+		PriceMin:    goodsForm.PriceMin,
+		PriceMax:    goodsForm.PriceMax,
+		IsHot:       goodsForm.IsHot,
+		IsNew:       goodsForm.IsNew,
+		IsTab:       goodsForm.IsTab,
+		TopCategory: goodsForm.TopCategory,
+		Pages:       goodsForm.Pages,
+		PagePerNums: goodsForm.PagePerNums,
+		KeyWords:    goodsForm.KeyWords,
+		Brand:       goodsForm.Brand,
 	}
-	isTab := ctx.DefaultQuery("it", "0")
-	if isTab == "1" {
-		request.IsTab = true
-	}
-	categoryId := ctx.DefaultQuery("c", "0")
-	categoryIdInt, _ := strconv.Atoi(categoryId)
-	request.TopCategory = int32(categoryIdInt)
+	zap.S().Infof("request: %v", request)
 
-	pages := ctx.DefaultQuery("p", "0")
-	pagesInt, _ := strconv.Atoi(pages)
-	request.Pages = int32(pagesInt)
-
-	perNums := ctx.DefaultQuery("pnum", "0")
-	perNumsInt, _ := strconv.Atoi(perNums)
-	request.PagePerNums = int32(perNumsInt)
-
-	keywords := ctx.DefaultQuery("q", "")
-	request.KeyWords = keywords
-
-	brandId := ctx.DefaultQuery("b", "0")
-	brandIdInt, _ := strconv.Atoi(brandId)
-	request.Brand = int32(brandIdInt)
-	ginContext := context.WithValue(context.Background(), "ginContext", ctx)
-	response, err := global.GoodsClient.GoodsList(ginContext, request)
+	response, err := global.GoodsClient.GoodsList(context.Background(), request)
 	if err != nil {
 		zap.S().Errorw("Error", "err", err.Error())
 		global.HandleGrpcErrToHttp(err, ctx)
@@ -89,12 +67,13 @@ func Detail(ctx *gin.Context) {
 	id := ctx.Query("id")
 	i, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
-		ctx.Status(http.StatusBadRequest)
+		global.HandleGrpcErrToHttp(err, ctx)
 		return
 	}
 	r, err := global.GoodsClient.GetGoodsDetail(ctx, &proto.GoodInfoRequest{Id: int32(i)})
 	if err != nil {
 		global.HandleGrpcErrToHttp(err, ctx)
+		return
 	}
 	rsp := map[string]interface{}{
 		"id":          r.Id,
@@ -111,5 +90,48 @@ func Detail(ctx *gin.Context) {
 		"on_sale":     r.OnSale,
 	}
 	ctx.JSON(http.StatusOK, rsp)
+}
 
+func Delete(ctx *gin.Context) {
+	id := ctx.Query("id")
+	i, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		ctx.Status(http.StatusBadRequest)
+	}
+	r, err := global.GoodsClient.GetGoodsDetail(ctx, &proto.GoodInfoRequest{Id: int32(i)})
+	if err != nil {
+		global.HandleGrpcErrToHttp(err, ctx)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"id": r.Id, "msg": "success"})
+}
+
+func New(ctx *gin.Context) {
+	var goodsInfo forms.GoodsInfo
+	if err := ctx.ShouldBindJSON(&goodsInfo); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid query parameters"})
+		return
+	}
+	req := &proto.CreateGoodsInfo{
+		CategoryId:      goodsInfo.CategoryId,
+		BrandId:         goodsInfo.BrandId,
+		OnSale:          goodsInfo.OnSale,
+		ShipFree:        goodsInfo.ShipFree,
+		IsNew:           goodsInfo.IsNew,
+		IsHot:           goodsInfo.IsHot,
+		Name:            goodsInfo.Name,
+		GoodsSn:         goodsInfo.GoodsSn,
+		MarketPrice:     goodsInfo.MarketPrice,
+		ShopPrice:       goodsInfo.ShopPrice,
+		GoodsBrief:      goodsInfo.GoodsBrief,
+		GoodsFrontImage: goodsInfo.GoodsFrontImage,
+		Images:          goodsInfo.Images,
+		DescImages:      goodsInfo.DescImages,
+	}
+	rsp, err := global.GoodsClient.CreateGoods(context.Background(), req)
+	if err != nil {
+		global.HandleGrpcErrToHttp(err, ctx)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"id": rsp.Id, "msg": "success"})
 }

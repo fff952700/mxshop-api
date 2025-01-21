@@ -19,6 +19,7 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	// 初始化router
 	routers := initialize.Routers()
+	initialize.InitValidator("zh")
 	// 服务发现
 	go func() {
 		// 模拟本地服务多部署，使用随机端口，正式使用k8s则无需使用 通过yapi测试不方便所有不开启
