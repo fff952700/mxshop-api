@@ -14,20 +14,20 @@ type GoodsFilter struct {
 }
 
 type GoodsInfo struct {
-	ID              int32    `json:"id" form:"id"`
-	Name            string   `json:"name" form:"name"`
-	GoodsSn         string   `json:"goods_sn" form:"goods_sn"`
-	Stocks          int32    `json:"stocks" form:"stocks"`
-	MarketPrice     float32  `json:"market_price" form:"market_price"`
-	ShopPrice       float32  `json:"shop_price" form:"shop_price"`
-	GoodsBrief      string   `json:"goods_brief" form:"goods_brief"`
-	ShipFree        bool     `json:"ship_free" form:"ship_free"`
-	Images          []string `json:"images" form:"images"`
-	DescImages      []string `json:"desc_images"`
-	GoodsFrontImage string   `json:"front_image"`
-	IsNew           bool     `json:"is_new" form:"is_new"`
-	IsHot           bool     `json:"is_hot" form:"is_hot"`
-	OnSale          bool     `json:"on_sale" form:"on_sale"`
-	CategoryId      int32    `json:"category_id" form:"category_id"`
-	BrandId         int32    `json:"brand_id" form:"brand_id"`
+	ID              int32    `json:"id" form:"id,omitempty"`
+	Name            string   `json:"name" form:"name,omitempty"`
+	GoodsSn         string   `json:"goods_sn" form:"goods_sn,omitempty"`
+	Stocks          int32    `json:"stocks" form:"stocks,omitempty"`
+	MarketPrice     float32  `json:"market_price" form:"market_price,omitempty"`
+	ShopPrice       float32  `json:"shop_price" form:"shop_price,omitempty"`
+	GoodsBrief      string   `json:"goods_brief" form:"goods_brief,omitempty"`
+	ShipFree        bool     `json:"ship_free" form:"ship_free,omitempty"`
+	Images          []string `json:"images" form:"images,omitempty"`
+	DescImages      []string `json:"desc_images,omitempty"`
+	GoodsFrontImage string   `json:"front_image,omitempty"`
+	IsNew           bool     `json:"is_new" form:"is_new,omitempty"`
+	IsHot           bool     `json:"is_hot" form:"is_hot,omitempty"`
+	OnSale          bool     `json:"on_sale" form:"on_sale,omitempty"`
+	CategoryId      int32    `json:"category_id" form:"category_id,omitempty"`
+	BrandId         int32    `json:"brand_id" form:"brand_id,omitempty"`
 }

@@ -2,13 +2,15 @@ package goods
 
 import (
 	"context"
+	"net/http"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+
 	"mxshop_api/goods_web/forms"
 	"mxshop_api/goods_web/global"
 	"mxshop_api/goods_web/proto"
-	"net/http"
-	"strconv"
 )
 
 func List(ctx *gin.Context) {
@@ -134,4 +136,34 @@ func New(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"id": rsp.Id, "msg": "success"})
+}
+
+func Update(ctx *gin.Context) {
+	var goodsInfo forms.GoodsInfo
+	if err := ctx.ShouldBindJSON(&goodsInfo); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid query parameters"})
+		return
+	}
+	req := &proto.CreateGoodsInfo{
+		Id:              goodsInfo.ID,
+		CategoryId:      goodsInfo.CategoryId,
+		BrandId:         goodsInfo.BrandId,
+		OnSale:          goodsInfo.OnSale,
+		ShipFree:        goodsInfo.ShipFree,
+		IsNew:           goodsInfo.IsNew,
+		IsHot:           goodsInfo.IsHot,
+		Name:            goodsInfo.Name,
+		GoodsSn:         goodsInfo.GoodsSn,
+		MarketPrice:     goodsInfo.MarketPrice,
+		ShopPrice:       goodsInfo.ShopPrice,
+		GoodsBrief:      goodsInfo.GoodsBrief,
+		GoodsFrontImage: goodsInfo.GoodsFrontImage,
+		Images:          goodsInfo.Images,
+		DescImages:      goodsInfo.DescImages,
+	}
+	if _, err := global.GoodsClient.UpdateGoods(context.Background(), req); err != nil {
+		global.HandleGrpcErrToHttp(err, ctx)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"id": req.Id, "msg": "success"})
 }
