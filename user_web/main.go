@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
 	"mxshop_api/user_web/global"

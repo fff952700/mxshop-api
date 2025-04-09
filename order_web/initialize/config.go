@@ -1,12 +1,12 @@
 package initialize
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
 	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/v2/vo"
+	"github.com/pelletier/go-toml/v2"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
@@ -80,11 +80,13 @@ func init() {
 	}); err != nil {
 		zap.S().Panicw("config listen failed", "err", err)
 	}
-
 	// 将json序列化为struct
 	// 实例化配置对象
 	cfg := global.Cfg
-	if err = json.Unmarshal([]byte(content), &cfg); err != nil {
+	//if err = json.Unmarshal([]byte(content), &cfg); err != nil {
+	//	zap.S().Panicw("unmarshal config failed", "err", err)
+	//}
+	if err = toml.Unmarshal([]byte(content), &cfg); err != nil {
 		zap.S().Panicw("unmarshal config failed", "err", err)
 	}
 	zap.S().Infow("server config", "cfg", cfg)

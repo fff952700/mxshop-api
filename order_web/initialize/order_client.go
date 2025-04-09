@@ -21,14 +21,14 @@ func init() {
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`),
 	)
 	if err != nil {
-		zap.S().Panicw("Init Client Conn Err", "error", err.Error())
+		zap.S().Panicw("init client conn err", "error", err.Error())
 		return
 	}
 	orderClient := proto.NewOrderClient(conn)
-	_, err = orderClient.OrderDetail(context.Background(), &proto.OrderRequest{UserId: 1})
+	_, err = orderClient.OrderDetail(context.Background(), &proto.OrderRequest{Id: 2})
 
 	if err != nil {
-		zap.S().Panicw("Init UserClient Err", "error", err.Error())
+		zap.S().Panicw("init orderClient err", "error", err.Error())
 		return
 	}
 	global.OrderClient = orderClient

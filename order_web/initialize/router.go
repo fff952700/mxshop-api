@@ -8,7 +8,11 @@ import (
 
 func Routers() *gin.Engine {
 	Router := gin.Default()
-	ApiGroup := Router.Group("/g/v1")
+	Router.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{"status": "ok"})
+	})
+	ApiGroup := Router.Group("/o/v1")
+
 	router.InitShopCartRouter(ApiGroup)
 	return Router
 }

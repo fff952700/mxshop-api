@@ -9,11 +9,12 @@ import (
 )
 
 func GetUserId(c *gin.Context) int32 {
+	// jwt 返回uint
 	userId, exists := c.Get("userId")
 	if !exists {
 		global.HandleGrpcErrToHttp(status.Errorf(codes.InvalidArgument, "用户不存在"), c)
 		return 0
 	}
-	return userId.(int32)
+	return int32(userId.(uint))
 
 }

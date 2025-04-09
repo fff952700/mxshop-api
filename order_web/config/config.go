@@ -1,29 +1,29 @@
 package config
 
 type ServerConfig struct {
-	Host     string   `mapstructure:"host" json:"host"`
-	Port     int      `mapstructure:"port" json:"port"`
-	Name     string   `mapstructure:"name" json:"name"`
-	Id       string   `mapstructure:"id" json:"id"`
-	Tag      []string `mapstructure:"tag" json:"tag"`
-	TimeZone string   `mapstructure:"timeZone" json:"timeZone"`
+	Host     string   `mapstructure:"host" toml:"host"`
+	Port     int      `mapstructure:"port" toml:"port"`
+	Name     string   `mapstructure:"name" toml:"name"`
+	Id       string   `mapstructure:"id" toml:"id"`
+	Tag      []string `mapstructure:"tag"  toml:"tag"`
+	TimeZone string   `mapstructure:"timeZone"  toml:"timeZone"`
 }
 
 type Cfg struct {
-	ServerInfo ServerConfig `mapstructure:"server" json:"server"`
-	JWTInfo    JwtConfig    `mapstructure:"jwt" json:"jwt"`
-	ConsulInfo ConsulConfig `mapstructure:"consul" json:"consul"`
+	ServerInfo ServerConfig `mapstructure:"server"  toml:"server"`
+	JWTInfo    JwtConfig    `mapstructure:"jwt"  toml:"jwt"`
+	ConsulInfo ConsulConfig `mapstructure:"consul"  toml:"consul"`
 }
 
 type JwtConfig struct {
-	SigningKey string `mapstructure:"signingKey" json:"signingKey"`
+	SigningKey string `mapstructure:"signingKey"  toml:"signingKey"`
 }
 
 type ConsulConfig struct {
-	Host             string `mapstructure:"host" json:"host"`
-	Port             int    `mapstructure:"port" json:"port"`
-	Target           string `mapstructure:"target" json:"target"`
-	TargetServerName string `mapstructure:"targetServerName" json:"targetServerName"`
+	Host             string `mapstructure:"host"  toml:"host"`
+	Port             int    `mapstructure:"port"  toml:"port"`
+	Target           string `mapstructure:"target"  toml:"target"`
+	TargetServerName string `mapstructure:"targetServerName"  toml:"targetServerName"`
 }
 
 type NacosConfig struct {
