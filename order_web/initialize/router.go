@@ -12,7 +12,7 @@ func Routers() *gin.Engine {
 		c.JSON(200, gin.H{"status": "ok"})
 	})
 	ApiGroup := Router.Group("/o/v1")
-
+	router.InitOrderRouter(ApiGroup)
 	router.InitShopCartRouter(ApiGroup)
 	return Router
 }

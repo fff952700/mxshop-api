@@ -25,7 +25,7 @@ func init() {
 		return
 	}
 	orderClient := proto.NewOrderClient(conn)
-	_, err = orderClient.OrderDetail(context.Background(), &proto.OrderRequest{Id: 2})
+	_, err = orderClient.OrderDetail(context.Background(), &proto.OrderRequest{Id: 1})
 
 	if err != nil {
 		zap.S().Panicw("init orderClient err", "error", err.Error())
